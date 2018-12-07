@@ -1,0 +1,362 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ex1</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-12-05"><meta name="DC.source" content="ex1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Machine Learning Online Class - Exercise 1: Linear Regression</a></li><li><a href="#2">Initialization</a></li><li><a href="#3">==================== Part 1: Basic Function ====================</a></li><li><a href="#4">======================= Part 2: Plotting =======================</a></li><li><a href="#5">=================== Part 3: Cost and Gradient descent ===================</a></li><li><a href="#6">============= Part 4: Visualizing J(theta_0, theta_1) =============</a></li></ul></div><h2 id="1">Machine Learning Online Class - Exercise 1: Linear Regression</h2><pre class="codeinput"><span class="comment">%  Instructions</span>
+<span class="comment">%  ------------</span>
+<span class="comment">%</span>
+<span class="comment">%  This file contains code that helps you get started on the</span>
+<span class="comment">%  linear exercise. You will need to complete the following functions</span>
+<span class="comment">%  in this exericse:</span>
+<span class="comment">%</span>
+<span class="comment">%     warmUpExercise.m</span>
+<span class="comment">%     plotData.m</span>
+<span class="comment">%     gradientDescent.m</span>
+<span class="comment">%     computeCost.m</span>
+<span class="comment">%     gradientDescentMulti.m</span>
+<span class="comment">%     computeCostMulti.m</span>
+<span class="comment">%     featureNormalize.m</span>
+<span class="comment">%     normalEqn.m</span>
+<span class="comment">%</span>
+<span class="comment">%  For this exercise, you will not need to change any code in this file,</span>
+<span class="comment">%  or any other files other than those mentioned above.</span>
+<span class="comment">%</span>
+<span class="comment">% x refers to the population size in 10,000s</span>
+<span class="comment">% y refers to the profit in $10,000s</span>
+<span class="comment">%</span>
+</pre><h2 id="2">Initialization</h2><pre class="codeinput">clear ; close <span class="string">all</span>; clc
+</pre><h2 id="3">==================== Part 1: Basic Function ====================</h2><p>Complete warmUpExercise.m</p><pre class="codeinput">fprintf(<span class="string">'Running warmUpExercise ... \n'</span>);
+fprintf(<span class="string">'5x5 Identity Matrix: \n'</span>);
+warmUpExercise()
+
+fprintf(<span class="string">'Program paused. Press enter to continue.\n'</span>);
+pause;
+</pre><pre class="codeoutput">Running warmUpExercise ... 
+5x5 Identity Matrix: 
+ans =
+     1     0     0     0     0
+     0     1     0     0     0
+     0     0     1     0     0
+     0     0     0     1     0
+     0     0     0     0     1
+Program paused. Press enter to continue.
+</pre><h2 id="4">======================= Part 2: Plotting =======================</h2><pre class="codeinput">fprintf(<span class="string">'Plotting Data ...\n'</span>)
+data = load(<span class="string">'ex1data1.txt'</span>);
+X = data(:, 1); y = data(:, 2);
+m = length(y); <span class="comment">% number of training examples</span>
+
+<span class="comment">% Plot Data</span>
+<span class="comment">% Note: You have to complete the code in plotData.m</span>
+plotData(X, y);
+
+fprintf(<span class="string">'Program paused. Press enter to continue.\n'</span>);
+pause;
+</pre><pre class="codeoutput">Plotting Data ...
+Program paused. Press enter to continue.
+</pre><img vspace="5" hspace="5" src="ex1_01.png" alt=""> <h2 id="5">=================== Part 3: Cost and Gradient descent ===================</h2><pre class="codeinput">X = [ones(m, 1), data(:,1)]; <span class="comment">% Add a column of ones to x</span>
+theta = zeros(2, 1); <span class="comment">% initialize fitting parameters</span>
+
+<span class="comment">% Some gradient descent settings</span>
+iterations = 1500;
+alpha = 0.01;
+
+fprintf(<span class="string">'\nTesting the cost function ...\n'</span>)
+<span class="comment">% compute and display initial cost</span>
+J = computeCost(X, y, theta);
+fprintf(<span class="string">'With theta = [0 ; 0]\nCost computed = %f\n'</span>, J);
+fprintf(<span class="string">'Expected cost value (approx) 32.07\n'</span>);
+
+<span class="comment">% further testing of the cost function</span>
+J = computeCost(X, y, [-1 ; 2]);
+fprintf(<span class="string">'\nWith theta = [-1 ; 2]\nCost computed = %f\n'</span>, J);
+fprintf(<span class="string">'Expected cost value (approx) 54.24\n'</span>);
+
+fprintf(<span class="string">'Program paused. Press enter to continue.\n'</span>);
+pause;
+
+fprintf(<span class="string">'\nRunning Gradient Descent ...\n'</span>)
+<span class="comment">% run gradient descent</span>
+theta = gradientDescent(X, y, theta, alpha, iterations);
+
+<span class="comment">% print theta to screen</span>
+fprintf(<span class="string">'Theta found by gradient descent:\n'</span>);
+fprintf(<span class="string">'%f\n'</span>, theta);
+fprintf(<span class="string">'Expected theta values (approx)\n'</span>);
+fprintf(<span class="string">' -3.6303\n  1.1664\n\n'</span>);
+
+<span class="comment">% Plot the linear fit</span>
+hold <span class="string">on</span>; <span class="comment">% keep previous plot visible</span>
+plot(X(:,2), X*theta, <span class="string">'-'</span>)
+legend(<span class="string">'Training data'</span>, <span class="string">'Linear regression'</span>)
+hold <span class="string">off</span> <span class="comment">% don't overlay any more plots on this figure</span>
+
+<span class="comment">% Predict values for population sizes of 35,000 and 70,000</span>
+predict1 = [1, 3.5] *theta;
+fprintf(<span class="string">'For population = 35,000, we predict a profit of %f\n'</span>,<span class="keyword">...</span>
+    predict1*10000);
+predict2 = [1, 7] * theta;
+fprintf(<span class="string">'For population = 70,000, we predict a profit of %f\n'</span>,<span class="keyword">...</span>
+    predict2*10000);
+
+fprintf(<span class="string">'Program paused. Press enter to continue.\n'</span>);
+pause;
+</pre><pre class="codeoutput">
+Testing the cost function ...
+With theta = [0 ; 0]
+Cost computed = 32.072734
+Expected cost value (approx) 32.07
+
+With theta = [-1 ; 2]
+Cost computed = 54.242455
+Expected cost value (approx) 54.24
+Program paused. Press enter to continue.
+
+Running Gradient Descent ...
+Theta found by gradient descent:
+-3.630291
+1.166362
+Expected theta values (approx)
+ -3.6303
+  1.1664
+
+For population = 35,000, we predict a profit of 4519.767868
+For population = 70,000, we predict a profit of 45342.450129
+Program paused. Press enter to continue.
+</pre><img vspace="5" hspace="5" src="ex1_02.png" alt=""> <h2 id="6">============= Part 4: Visualizing J(theta_0, theta_1) =============</h2><pre class="codeinput">fprintf(<span class="string">'Visualizing J(theta_0, theta_1) ...\n'</span>)
+
+<span class="comment">% Grid over which we will calculate J</span>
+theta0_vals = linspace(-10, 10, 100);
+theta1_vals = linspace(-1, 4, 100);
+
+<span class="comment">% initialize J_vals to a matrix of 0's</span>
+J_vals = zeros(length(theta0_vals), length(theta1_vals));
+
+<span class="comment">% Fill out J_vals</span>
+<span class="keyword">for</span> i = 1:length(theta0_vals)
+    <span class="keyword">for</span> j = 1:length(theta1_vals)
+	  t = [theta0_vals(i); theta1_vals(j)];
+	  J_vals(i,j) = computeCost(X, y, t);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="comment">% Because of the way meshgrids work in the surf command, we need to</span>
+<span class="comment">% transpose J_vals before calling surf, or else the axes will be flipped</span>
+J_vals = J_vals';
+<span class="comment">% Surface plot</span>
+figure;
+surf(theta0_vals, theta1_vals, J_vals)
+xlabel(<span class="string">'\theta_0'</span>); ylabel(<span class="string">'\theta_1'</span>);
+
+<span class="comment">% Contour plot</span>
+figure;
+<span class="comment">% Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100</span>
+contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
+xlabel(<span class="string">'\theta_0'</span>); ylabel(<span class="string">'\theta_1'</span>);
+hold <span class="string">on</span>;
+plot(theta(1), theta(2), <span class="string">'rx'</span>, <span class="string">'MarkerSize'</span>, 10, <span class="string">'LineWidth'</span>, 2);
+</pre><pre class="codeoutput">Visualizing J(theta_0, theta_1) ...
+</pre><img vspace="5" hspace="5" src="ex1_03.png" alt=""> <img vspace="5" hspace="5" src="ex1_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Machine Learning Online Class - Exercise 1: Linear Regression
+
+%  Instructions
+%  REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%
+%  This file contains code that helps you get started on the
+%  linear exercise. You will need to complete the following functions
+%  in this exericse:
+%
+%     warmUpExercise.m
+%     plotData.m
+%     gradientDescent.m
+%     computeCost.m
+%     gradientDescentMulti.m
+%     computeCostMulti.m
+%     featureNormalize.m
+%     normalEqn.m
+%
+%  For this exercise, you will not need to change any code in this file,
+%  or any other files other than those mentioned above.
+%
+% x refers to the population size in 10,000s
+% y refers to the profit in $10,000s
+%
+
+%% Initialization
+clear ; close all; clc
+
+%% ==================== Part 1: Basic Function ====================
+% Complete warmUpExercise.m
+fprintf('Running warmUpExercise ... \n');
+fprintf('5x5 Identity Matrix: \n');
+warmUpExercise()
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+
+%% ======================= Part 2: Plotting =======================
+fprintf('Plotting Data ...\n')
+data = load('ex1data1.txt');
+X = data(:, 1); y = data(:, 2);
+m = length(y); % number of training examples
+
+% Plot Data
+% Note: You have to complete the code in plotData.m
+plotData(X, y);
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+%% =================== Part 3: Cost and Gradient descent ===================
+
+X = [ones(m, 1), data(:,1)]; % Add a column of ones to x
+theta = zeros(2, 1); % initialize fitting parameters
+
+% Some gradient descent settings
+iterations = 1500;
+alpha = 0.01;
+
+fprintf('\nTesting the cost function ...\n')
+% compute and display initial cost
+J = computeCost(X, y, theta);
+fprintf('With theta = [0 ; 0]\nCost computed = %f\n', J);
+fprintf('Expected cost value (approx) 32.07\n');
+
+% further testing of the cost function
+J = computeCost(X, y, [-1 ; 2]);
+fprintf('\nWith theta = [-1 ; 2]\nCost computed = %f\n', J);
+fprintf('Expected cost value (approx) 54.24\n');
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+fprintf('\nRunning Gradient Descent ...\n')
+% run gradient descent
+theta = gradientDescent(X, y, theta, alpha, iterations);
+
+% print theta to screen
+fprintf('Theta found by gradient descent:\n');
+fprintf('%f\n', theta);
+fprintf('Expected theta values (approx)\n');
+fprintf(' -3.6303\n  1.1664\n\n');
+
+% Plot the linear fit
+hold on; % keep previous plot visible
+plot(X(:,2), X*theta, '-')
+legend('Training data', 'Linear regression')
+hold off % don't overlay any more plots on this figure
+
+% Predict values for population sizes of 35,000 and 70,000
+predict1 = [1, 3.5] *theta;
+fprintf('For population = 35,000, we predict a profit of %f\n',...
+    predict1*10000);
+predict2 = [1, 7] * theta;
+fprintf('For population = 70,000, we predict a profit of %f\n',...
+    predict2*10000);
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+%% ============= Part 4: Visualizing J(theta_0, theta_1) =============
+fprintf('Visualizing J(theta_0, theta_1) ...\n')
+
+% Grid over which we will calculate J
+theta0_vals = linspace(-10, 10, 100);
+theta1_vals = linspace(-1, 4, 100);
+
+% initialize J_vals to a matrix of 0's
+J_vals = zeros(length(theta0_vals), length(theta1_vals));
+
+% Fill out J_vals
+for i = 1:length(theta0_vals)
+    for j = 1:length(theta1_vals)
+	  t = [theta0_vals(i); theta1_vals(j)];
+	  J_vals(i,j) = computeCost(X, y, t);
+    end
+end
+
+
+% Because of the way meshgrids work in the surf command, we need to
+% transpose J_vals before calling surf, or else the axes will be flipped
+J_vals = J_vals';
+% Surface plot
+figure;
+surf(theta0_vals, theta1_vals, J_vals)
+xlabel('\theta_0'); ylabel('\theta_1');
+
+% Contour plot
+figure;
+% Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
+contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
+xlabel('\theta_0'); ylabel('\theta_1');
+hold on;
+plot(theta(1), theta(2), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
+
+##### SOURCE END #####
+--></body></html>
